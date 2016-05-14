@@ -67,7 +67,7 @@
 (setq make-backup-files nil)
 
 ;; Changelog configuration
-(setq user-mail-address "kaustav.dasmodak@yahoo.co.in")  ;; default: user@host
+(setq user-mail-address "andre@andregarzia.com")  ;; default: user@host
 (setq change-log-default-name "CHANGELOG")   ;; default: ChangeLog
 
 ;; Startup *scratch* buffer
@@ -123,23 +123,12 @@
  'helm-projectile
  'php-mode
  'php-extras
- 'rust-mode
- 'racer
- 'cargo
  'flycheck
- 'flycheck-rust
  'diff-hl
  'undo-tree
  'monokai-theme
  'multiple-cursors
  'editorconfig
- 'go-mode
- 'go-projectile
- 'go-rename
- 'go-stacktracer
- 'go-errcheck
- 'go-playground
- 'golint
  'tern
  'company
  'company-go
@@ -180,11 +169,6 @@
 (setq company-tooltip-align-annotations t)
 (setq company-tooltip-limit 20)
 (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
-
-;; Rust mode
-(add-hook 'rust-mode-hook #'racer-mode)
-(add-hook 'racer-mode-hook #'eldoc-mode)
-(add-hook 'rust-mode-hook 'cargo-minor-mode)
 
 ;; JS2 mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -278,16 +262,6 @@
 ;; Line numbers
 (add-hook 'prog-mode-hook 'linum-mode)
 (setq linum-format "%4d ")
-
-;; Go mode
-(defun my-go-mode-hook ()
-  ; Use goimports instead of go-fmt
-  (setq gofmt-command "goimports")
-  ; Call Gofmt before saving
-  (add-hook 'before-save-hook 'gofmt-before-save)
-  ; Godef jump key binding
-  (local-set-key (kbd "M-.") 'godef-jump))
-(add-hook 'go-mode-hook 'my-go-mode-hook)
 
 ;; Company Jedi - for Python
 (defun my/python-mode-hook ()
@@ -395,3 +369,29 @@
 ;; Newline and indent on pressing Return
 (local-set-key (kbd "RET") 'newline-and-indent)
 (put 'dired-find-alternate-file 'disabled nil)
+
+;; Adding support for OCaml
+;; Remember to install merling, ocp-indent from opam because the version on
+;; melpa/marmelade is very old.
+;;
+;; Add opam emacs directory to the load-path
+(setq opam-share (substring (shell-command-to-string "opam config var share 2> /dev/null") 0 -1))
+(add-to-list 'load-path (concat opam-share "/emacs/site-lisp"))
+
+;; Load tuareg
+(load "/home/soapdog/.opam/4.03.0/share/emacs/site-lisp/tuareg-site-file")
+
+;; Load caml-mode
+(add-to-list 'load-path "/home/soapdog/.opam/4.03.0/share/emacs/site-lisp/")
+
+;; Load ocp-indent
+(require 'ocp-indent)
+;; Load merlin-mode
+(require 'merlin)
+;; Start merlin on ocaml files
+(add-hook 'tuareg-mode-hook 'merlin-mode t)
+(add-hook 'caml-mode-hook 'merlin-mode t)
+;; Enable auto-complete
+(setq merlin-use-auto-complete-mode 'easy)
+;; Use opam switch to lookup ocamlmerlin binary
+(setq merlin-command 'opam)
