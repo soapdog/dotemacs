@@ -45,7 +45,7 @@
 (delete-selection-mode 1)
 
 ;; Set font
-(set-frame-font "Source Code Pro 11")
+(set-frame-font "mononoki 14")
 
 ;; Do not test recent files on startup
 (setq recentf-keep '(file-remote-p file-readable-p))
@@ -371,7 +371,7 @@
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; Adding support for OCaml
-;; Remember to install merling, ocp-indent from opam because the version on
+;; Remember to install merlin, ocp-indent, tuareg from opam because the version on
 ;; melpa/marmelade is very old.
 ;;
 ;; Add opam emacs directory to the load-path
@@ -379,10 +379,14 @@
 (add-to-list 'load-path (concat opam-share "/emacs/site-lisp"))
 
 ;; Load tuareg
-(load "/home/soapdog/.opam/4.03.0/share/emacs/site-lisp/tuareg-site-file")
+(if (eq system-type 'darwin)
+  (load "/Users/soapdog/.opam/4.03.0/share/emacs/site-lisp/tuareg-site-file") 
+  (load "/home/soapdog/.opam/4.03.0/share/emacs/site-lisp/tuareg-site-file"))
 
 ;; Load caml-mode
-(add-to-list 'load-path "/home/soapdog/.opam/4.03.0/share/emacs/site-lisp/")
+(if (eq system-type 'darwin)
+  (add-to-list 'load-path "/home/soapdog/.opam/4.03.0/share/emacs/site-lisp/")
+  (add-to-list 'load-path "/Users/soapdog/.opam/4.03.0/share/emacs/site-lisp"))
 
 ;; Load ocp-indent
 (require 'ocp-indent)
