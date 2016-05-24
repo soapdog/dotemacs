@@ -395,3 +395,9 @@
 (setq merlin-use-auto-complete-mode 'easy)
 ;; Use opam switch to lookup ocamlmerlin binary
 (setq merlin-command 'opam)
+
+;; Adding support for racket
+(require 'racket-mode)
+
+(provide 'init)
+;;; init.el ends here
